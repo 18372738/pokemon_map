@@ -1,4 +1,8 @@
 from django.db import models  # noqa F401
+from datetime import datetime
+
+
+
 
 class Pokemon(models.Model):
     title = models.CharField(max_length=200)
@@ -13,10 +17,10 @@ class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
     lat = models.FloatField()
     lon = models.FloatField()
-    appeared_at = models.DateTimeField(null=True, blank=True)
-    disappeared_at = models.DateTimeField(null=True, blank=True)
+    appeared_at = models.DateTimeField()
+    disappeared_at = models.DateTimeField()
     level = models.IntegerField(null=True, blank=True)
-    health = models.IntegerField(null=True, blank=True)
-    attak = models.IntegerField(null=True, blank=True)
-    protection = models.IntegerField(null=True, blank=True)
-    endurance = models.IntegerField(null=True, blank=True)
+    health = models.IntegerField(default=100)
+    attak = models.IntegerField(default=100)
+    protection = models.IntegerField(default=100)
+    endurance = models.IntegerField(default=100)
