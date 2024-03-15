@@ -74,7 +74,8 @@ def show_pokemon(request, pokemon_id):
     pokemon_dict = {
         'pokemon_id': pokemon.id,
         'img_url': request.build_absolute_uri(pokemon.photo.url),
-        'title_ru': pokemon.title
+        'title_ru': pokemon.title,
+        'description': pokemon.description
         }
 
     return render(request, 'pokemon.html', context={

@@ -7,7 +7,7 @@ from datetime import datetime
 class Pokemon(models.Model):
     title = models.CharField(max_length=200)
     photo = models.ImageField(null=True, blank=True)
-
+    description = models.TextField(blank=True, default="")
 
     def __str__(self):
         return '{}'.format(self.title)
