@@ -52,7 +52,7 @@ def show_all_pokemons(request):
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'img_url': photo_url,
-            'title_ru': pokemon.title_ru,
+            'title_ru': pokemon.title,
         })
 
     return render(request, 'mainpage.html', context={
@@ -71,13 +71,20 @@ def show_pokemon(request, pokemon_id):
             pokemon_entity.lon,
             request.build_absolute_uri(pokemon.photo.url)
         )
+    previous_evolution = {
+            "title_ru": pokemon.previous_evolution.title,
+            "pokemon_id": pokemon.previous_evolution.id,
+            "img_url": request.build_absolute_uri(pokemon.previous_evolution.photo.url)
+            }
+
     pokemon_dict = {
         'pokemon_id': pokemon.id,
         'img_url': request.build_absolute_uri(pokemon.photo.url),
-        'title_ru': pokemon.title_ru,
+        'title_ru': pokemon.title,
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
+        'previous_evolution': previous_evolution,
         }
 
     return render(request, 'pokemon.html', context={
