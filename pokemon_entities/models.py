@@ -9,9 +9,9 @@ class Pokemon(models.Model):
     title = models.CharField('Название (рус.)', max_length=200)
     title_en = models.CharField('Название (анг.)', max_length=200, blank=True)
     title_jp = models.CharField('Название (яп.)', max_length=200, blank=True)
-    photo = models.ImageField('Изображение', null=True, blank=True)
-    description = models.TextField('Описнаие', blank=True, default="")
-    previous_evolution = models.ForeignKey("self", verbose_name="Прошлая эволюция", on_delete=models.SET_NULL, null=True, blank=True, related_name="next_evolution")
+    photo = models.ImageField('Изображение', null=True)
+    description = models.TextField('Описнаие', blank=True)
+    previous_evolution = models.ForeignKey("self", verbose_name="Прошлая эволюция", on_delete=models.SET_NULL, null=True, related_name="next_evolution")
 
     def __str__(self):
         return self.title
@@ -25,10 +25,10 @@ class PokemonEntity(models.Model):
     appeared_at = models.DateTimeField("Время появления")
     disappeared_at = models.DateTimeField("Время исчезновения")
     level = models.IntegerField("Уровень", null=True, blank=True)
-    health = models.IntegerField("Здоровье", default=100)
-    attak = models.IntegerField("Атака", default=100)
-    protection = models.IntegerField("Защита", default=100)
-    endurance = models.IntegerField("Выносливостьн", default=100)
+    health = models.IntegerField("Здоровье", null=True, blank=True)
+    attak = models.IntegerField("Атака", null=True, blank=True)
+    protection = models.IntegerField("Защита", null=True, blank=True)
+    endurance = models.IntegerField("Выносливостьн", null=True, blank=True)
 
     def __str__(self):
         return self.pokemon.title
