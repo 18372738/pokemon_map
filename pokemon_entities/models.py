@@ -5,25 +5,30 @@ from datetime import datetime
 
 
 class Pokemon(models.Model):
-    title = models.CharField(max_length=200)
-    title_en = models.CharField(max_length=200, blank=True)
-    title_jp = models.CharField(max_length=200, blank=True)
-    photo = models.ImageField(null=True, blank=True)
-    description = models.TextField(blank=True, default="")
-    previous_evolution = models.ForeignKey("self", on_delete=models.SET_NULL, null=True,)
+    """Покемон"""
+    title = models.CharField('Название (рус.)', max_length=200)
+    title_en = models.CharField('Название (анг.)', max_length=200, blank=True)
+    title_jp = models.CharField('Название (яп.)', max_length=200, blank=True)
+    photo = models.ImageField('Изображение', null=True, blank=True)
+    description = models.TextField('Описнаие', blank=True, default="")
+    previous_evolution = models.ForeignKey("self", verbose_name="Прошлая эволюция", on_delete=models.SET_NULL, null=True, blank=True, related_name="next_evolution")
 
     def __str__(self):
-        return '{}'.format(self.title)
+        return self.title
 
 
 class PokemonEntity(models.Model):
-    pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
-    lat = models.FloatField()
-    lon = models.FloatField()
-    appeared_at = models.DateTimeField()
-    disappeared_at = models.DateTimeField()
-    level = models.IntegerField(null=True, blank=True)
-    health = models.IntegerField(default=100)
-    attak = models.IntegerField(default=100)
-    protection = models.IntegerField(default=100)
-    endurance = models.IntegerField(default=100)
+    """Характеристика покемона"""
+    pokemon = models.ForeignKey(Pokemon, verbose_name="Покемон", on_delete=models.CASCADE)
+    lat = models.FloatField("Широта")
+    lon = models.FloatField("Долгота")
+    appeared_at = models.DateTimeField("Время появления")
+    disappeared_at = models.DateTimeField("Время исчезновения")
+    level = models.IntegerField("Уровень", null=True, blank=True)
+    health = models.IntegerField("Здоровье", default=100)
+    attak = models.IntegerField("Атака", default=100)
+    protection = models.IntegerField("Защита", default=100)
+    endurance = models.IntegerField("Выносливостьн", default=100)
+
+    def __str__(self):
+        return self.pokemon.title
