@@ -29,9 +29,10 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 
 
 def show_all_pokemons(request):
+    now = localtime()
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    active_pokemon = PokemonEntity.objects.filter(appeared_at__lte=localtime(), disappeared_at__gte=localtime())
-    for pokemon_entity in active_pokemon:
+    active_pokemons = PokemonEntity.objects.filter(appeared_at__lte=now, disappeared_at__gte=now)
+    for pokemon_entity in active_pokemons:
         if pokemon_entity.pokemon.photo:
             photo_url = request.build_absolute_uri(pokemon_entity.pokemon.photo.url)
         else:
@@ -62,9 +63,10 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(id=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, id=pokemon_id)
+    now = localtime()
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    for pokemon_entity in PokemonEntity.objects.filter(appeared_at__lte=localtime(), disappeared_at__gt=localtime()):
+    for pokemon_entity in PokemonEntity.objects.filter(appeared_at__lte=now, disappeared_at__gt=now):
         add_pokemon(
             folium_map,
             pokemon_entity.lat,
@@ -72,24 +74,22 @@ def show_pokemon(request, pokemon_id):
             request.build_absolute_uri(pokemon.photo.url)
         )
 
+    previous_evolution = {}
     if pokemon.previous_evolution:
         previous_evolution = {
             "title_ru": pokemon.previous_evolution.title,
             "pokemon_id": pokemon.previous_evolution.id,
             "img_url": request.build_absolute_uri(pokemon.previous_evolution.photo.url),
         }
-    else:
-        previous_evolution = {}
 
     next_pokemon = pokemon.next_evolution.first()
+    next_evolution = {}
     if next_pokemon:
         next_evolution = {
             "title_ru": next_pokemon.title,
             "pokemon_id": next_pokemon.id,
             "img_url": request.build_absolute_uri(next_pokemon.photo.url)
         }
-    else:
-        next_evolution = {}
 
     pokemon_dict = {
         'pokemon_id': pokemon.id,
